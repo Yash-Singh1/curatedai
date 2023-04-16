@@ -97,13 +97,13 @@ const Dashboard: NextPage = () => {
                 )
                   .then((response) => response.json())
                   .then((json: { confidence: number; } & Bookmark) => {
-                    if (json.confidence < 0.75) {
+                    if (json.confidence < 0.0) {
                       setHud(true);
                       setTimeout(() => {
                         setHud(false);
                       }, 2000);
                     } else {
-                      void router.push(`/bookmark/${json.id}`);
+                      void router.push(`/bookmark/${json.id}?c=${json.confidence}`);
                     }
                   });
               }}

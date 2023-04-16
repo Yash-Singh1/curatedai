@@ -27,6 +27,14 @@ const Bookmark: NextPage = () => {
     }
   }, [id, auth.isSignedIn]);
 
+  const [confidence, setConfidence] = useState(-1);
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("c")) {
+      setConfidence(parseFloat(query.get("c") as string));
+    }
+  });
+
   return (
     <Layout>
       {typeof auth.isSignedIn === "undefined" || !bookmark ? (
@@ -34,7 +42,7 @@ const Bookmark: NextPage = () => {
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-red-500 motion-safe:animate-[spin_0.5s_linear_infinite]"></div>
         </main>
       ) : (
-        <main className="flex-grow bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 sm:p-6 md:p-12 lg:p-20 article">
+        <main className="article flex-grow bg-gradient-to-b from-[#2e026d] to-[#15162c] p-4 sm:p-6 md:p-12 lg:p-20">
           <h1
             onClick={() => {
               location.href = bookmark?.url || "#";
@@ -42,7 +50,7 @@ const Bookmark: NextPage = () => {
             tabIndex={0}
             className="group flex cursor-pointer text-4xl font-bold text-white hover:underline hover:decoration-dotted"
           >
-            {bookmark.title}
+            {`${bookmark.title}`}
             <div
               className="ml-2 hidden items-center justify-center group-hover:flex"
               dangerouslySetInnerHTML={{
@@ -50,6 +58,13 @@ const Bookmark: NextPage = () => {
               }}
             />
           </h1>
+          {/* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */}
+          {confidence == -1 ? null : (
+            <div className="mt-4 w-max rounded-lg bg-slate-400/80 p-1 px-2 text-white">
+              Confidence:{" "}
+              {confidence == -1 ? "" : Math.round(confidence * 100) + "%"}
+            </div>
+          )}
           <ReactMarkdown
             className="mt-4 text-white"
             remarkPlugins={[remarkGfm]}
