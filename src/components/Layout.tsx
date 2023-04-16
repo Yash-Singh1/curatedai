@@ -1,7 +1,8 @@
-import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
+import { UserButton, useAuth } from "@clerk/nextjs";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
+import { SignInButton } from "./SigninButton";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
