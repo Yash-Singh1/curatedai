@@ -12,7 +12,6 @@ const Bookmark: NextPage = () => {
   const params = useSearchParams();
   const id = params.get("id") as string;
   const [bookmark, setBookmark] = useState<Bookmark | null>(null);
-  const [loading, setLoading] = useState(true);
   const auth = useAuth();
   const router = useRouter();
 
@@ -24,7 +23,6 @@ const Bookmark: NextPage = () => {
         .then((res) => res.json())
         .then((data) => {
           setBookmark(data as Bookmark);
-          setLoading(false);
         });
     }
   }, [id, auth.isSignedIn]);

@@ -49,6 +49,7 @@ const Dashboard: NextPage = () => {
       }
     );
     const data = (await res.json()) as Bookmark[];
+    setLoading(false);
     setBookmarks(data);
   }
 
