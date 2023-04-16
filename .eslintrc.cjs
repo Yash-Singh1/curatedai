@@ -32,6 +32,8 @@ const config = {
     "@typescript-eslint/no-non-null-assertion": "off",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };
 

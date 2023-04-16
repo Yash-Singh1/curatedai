@@ -5,7 +5,6 @@ import { type Bookmark } from "../dashboard";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import ReactMarkdown from "react-markdown";
-import { useRouter } from "next/router";
 import remarkGfm from "remark-gfm";
 
 const Bookmark: NextPage = () => {
@@ -13,7 +12,6 @@ const Bookmark: NextPage = () => {
   const id = params.get("id") as string;
   const [bookmark, setBookmark] = useState<Bookmark | null>(null);
   const auth = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
     if (id && auth.isSignedIn) {
@@ -58,11 +56,10 @@ const Bookmark: NextPage = () => {
               }}
             />
           </h1>
-          {/* eslint-disable-next-line @typescript-eslint/restrict-plus-operands */}
           {confidence == -1 ? null : (
             <div className="mt-4 w-max rounded-lg bg-slate-400/80 p-1 px-2 text-white">
               Confidence:{" "}
-              {confidence == -1 ? "" : Math.round(confidence * 100) + "%"}
+              {confidence == -1 ? "" : Math.round(confidence * 100).toString() + "%"}
             </div>
           )}
           <ReactMarkdown
