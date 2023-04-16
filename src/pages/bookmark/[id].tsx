@@ -70,9 +70,12 @@ const Bookmark: NextPage = () => {
                       id,
                       userId: auth.userId!,
                     }),
+                    headers: {
+                      "content-type": "application/json",
+                    },
                   }
                 ).then(() => {
-                  router.back();
+                  location.pathname = "/dashboard";
                 });
               }}
               className="mt-2 flex cursor-pointer items-center justify-center gap-x-2 rounded-lg bg-red-400/50 p-1 px-3 text-lg text-[#f2f2f2]"

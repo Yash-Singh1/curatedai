@@ -167,6 +167,7 @@ const Dashboard: NextPage = () => {
                   .then((res) => res.json())
                   .then(() => {
                     setShown(false);
+                    location.search = "";
                     void refetch();
                   });
               }}
