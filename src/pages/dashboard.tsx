@@ -22,6 +22,8 @@ const Dashboard: NextPage = () => {
   const [url, setURL] = useState("");
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
+  const [hud, setHud] = useState(false);
 
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
 
@@ -49,8 +51,8 @@ const Dashboard: NextPage = () => {
       }
     );
     const data = (await res.json()) as Bookmark[];
-    setLoading(false);
     setBookmarks(data);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -76,6 +78,48 @@ const Dashboard: NextPage = () => {
                 __html: `<svg xmlns="http://www.w3.org/2000/svg" fill="white" width="30" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>`,
               }}
             />
+          </div>
+          <div className="mt-4 flex flex-row items-center justify-center">
+            <input
+              className="w-full rounded-l-md border border-transparent bg-slate-400/20 px-2 py-1 text-white outline-none hover:border-slate-400/80"
+              placeholder="Search..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+            <button
+              onClick={() => {
+                void fetch(
+                  `https://curatedai-backend.epiccodewizard2.repl.co/api/query?q=${search}&userId=${auth.userId!}`,
+                  {
+                    headers,
+                    method: "GET",
+                  }
+                )
+                  .then((response) => response.json())
+                  .then((json: { confidence: number; } & Bookmark) => {
+                    if (json.confidence < 0.75) {
+                      setHud(true);
+                      setTimeout(() => {
+                        setHud(false);
+                      }, 2000);
+                    } else {
+                      void router.push(`/bookmark/${json.id}`);
+                    }
+                  });
+              }}
+              className="h-full cursor-pointer rounded-r-md bg-blue-400 p-1 px-2 hover:bg-blue-500 hover:transition-colors"
+            >
+              🔎
+            </button>
+            <div
+              className={`absolute bottom-4 flex w-screen items-center justify-center text-center text-black ${
+                hud ? "" : "hidden"
+              }`}
+            >
+              <div className="w-max rounded-lg bg-yellow-500 p-2">
+                No results found
+              </div>
+            </div>
           </div>
           {bookmarks.length ? (
             <div className="flex flex-wrap gap-8">
